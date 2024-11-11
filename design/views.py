@@ -7,7 +7,6 @@ from django.urls import reverse_lazy
 from .forms import CustomUserCreatingForm
 from .models import CustomUser
 
-
 # Create your views here.
 
 def index(request):
