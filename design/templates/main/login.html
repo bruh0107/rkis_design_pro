@@ -4,14 +4,7 @@
     <h2>Вход в систему</h2>
     <form class="form" method="post">
         {% csrf_token %}
-        <div>
-            <p>{{ form.username.label_tag }}</p>
-            <p>{{ form.username }}</p>
-        </div>
-        <div>
-            <p>{{ form.password.label_tag }}</p>
-            <p>{{ form.password }}</p>
-        </div>
+        {{ form.as_p }}
 
         <button type="submit" class="btn btn-success">Войти</button>
         <br><br>
