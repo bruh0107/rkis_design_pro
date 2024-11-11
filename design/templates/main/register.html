@@ -3,8 +3,13 @@
 <title>{% block title %}Главная - Design.Pro{% endblock %}</title>
 
 {% block content %}
-<h1>Design.Pro - Главная страница</h1>
-<p>
-    Оставляйте заявки и наши дизайнеры их оценят!
-</p>
+    <h2>Регистрация</h2>
+
+<form class="form" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+    <br><br>
+    <span>Уже есть аккаунт? <a href="{% url 'login' %}">Войдите в аккаунт</a>.</span>
+</form>
 {% endblock %}

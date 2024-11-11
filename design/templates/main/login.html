@@ -1,0 +1,20 @@
+{% extends 'basic.html' %}
+
+{% block content %}
+    <h2>Вход в систему</h2>
+    <form class="form" method="post">
+        {% csrf_token %}
+        <div>
+            <p>{{ form.username.label_tag }}</p>
+            <p>{{ form.username }}</p>
+        </div>
+        <div>
+            <p>{{ form.password.label_tag }}</p>
+            <p>{{ form.password }}</p>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Войти</button>
+        <br><br>
+        <span>Нет аккаунта? <a href="{% url 'register' %}">Зарегистрируйтесь</a>.</span>
+    </form>
+{% endblock %}
