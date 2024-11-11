@@ -3,10 +3,10 @@
 {% block content %}
     <h2>Добро пожаловать,
         {% if user.gender == 'M' %}
-        Мистер
-        {% else %}
-        Мисс
+            Мистер
+        {% elif user.gender == 'F' %}
+            Мисс
         {% endif %}
-        {{ user.username }}</h2>
+        {{ user.first_name }}</h2>
 
 {% endblock %}
