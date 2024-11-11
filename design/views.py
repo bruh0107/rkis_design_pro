@@ -26,4 +26,5 @@ class Registration(generic.CreateView):
     success_url = reverse_lazy('login')
 
 def profile_view(request):
-    return render(request, 'main/profile.html')
+    user = request.user
+    return render(request, 'main/profile.html', {'user': user})

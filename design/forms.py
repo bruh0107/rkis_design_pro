@@ -42,4 +42,7 @@ class CustomUserCreatingForm(forms.ModelForm):
 
     class Meta:
         model = CustomUser
-        fields = ("username", "first_name", "last_name", 'email')
+        fields = ("username", "first_name", "last_name", 'email', 'gender')
+        widgets = {
+            'gender': forms.RadioSelect
+        }

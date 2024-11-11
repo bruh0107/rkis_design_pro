@@ -1,6 +1,12 @@
 {% extends 'basic.html' %}
 
 {% block content %}
-    <h2>Добро пожаловать, {{ user.username }}</h2>
+    <h2>Добро пожаловать,
+        {% if user.gender == 'M' %}
+        Мистер
+        {% else %}
+        Мисс
+        {% endif %}
+        {{ user.username }}</h2>
 
 {% endblock %}
