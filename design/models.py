@@ -11,12 +11,13 @@ class CustomUser(AbstractUser):
     GENDER_CHOICES = [
         ('M', "Мужчина"),
         ('F', "Женщина"),
+        ('O', 'Не указано')
     ]
     gender = models.CharField(
         max_length=1,
         choices=GENDER_CHOICES,
         verbose_name="Пол",
-        default='M'
+        default='O'
     )
 
     USERNAME_FIELD = 'email'
