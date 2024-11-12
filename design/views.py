@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import login, logout
@@ -25,10 +26,6 @@ class Registration(generic.CreateView):
     form_class = CustomUserCreatingForm
     success_url = reverse_lazy('login')
 
-def profile_view(request):
-    user = request.user
-    return render(request, 'main/profile.html', {'user': user})
-
 def create_application(request):
     if request.method == "POST":
         form = ApplicationForm(request.POST, request.FILES)
@@ -43,6 +40,36 @@ def create_application(request):
 
     return render(request, 'main/application-create.html', {'form': form})
 
-def detail_application(request, pk):
+@login_required
+class Profile(generic.DetailView):
+    model = CustomUser
+    template_name = 'main/profile.html'
+    context_object_name = 'user_profile'
+
+    def get_object(self):
+        return self.request.user
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        status_filter = self.request.GET.get('status', '')
+
+        if status_filter:
+            application = Application.objects.filter(user=self.request.user, status=status_filter).order_by('data')
+        else:
+            application = Application.objects.filter(user=self.request.user).order_by('data')
+
+        context['application'] = application
+        context['status_filter'] = status_filter
+
+        return context
+
+@login_required
+def delete_application(request, pk):
     application = get_object_or_404(Application, pk=pk)
-    return render(request, 'main/application-detail.html', {'application': application})
+    if application.applicant == request.user:
+        if application.status == 'N':
+            application.delete()
+            messages.success(request, 'Заявка удалена')
+        else:
+            messages.error(request, 'Вы не можете удалить заявки, которые имеют статус "Принято в работу" и "Выполнено"')

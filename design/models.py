@@ -52,6 +52,10 @@ class Application(models.Model):
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default="N", verbose_name='Статус заявки')
     date = models.DateTimeField(help_text="Дата создания заявки", auto_now_add=True)
 
+    class Meta:
+        verbose_name = 'Заявка'
+        verbose_name_plural = 'Заявки'
+
     def get_absolute_url(self):
         return reverse('application-detail', args=[str(self.id)])
 
