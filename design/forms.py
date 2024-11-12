@@ -1,8 +1,11 @@
+from cProfile import label
+
 from django import forms
 from django.contrib.auth.password_validation import password_changed
 from django.core.exceptions import ValidationError
 
-from .models import CustomUser
+from .models import CustomUser, Application
+
 
 class CustomUserCreatingForm(forms.ModelForm):
     username = forms.CharField(label="Имя пользователя", max_length=150)
@@ -46,3 +49,9 @@ class CustomUserCreatingForm(forms.ModelForm):
         widgets = {
             'gender': forms.RadioSelect
         }
+
+class ApplicationForm(forms.ModelForm):
+    title = forms.CharField(label='Заголовок заявки', widget=forms.TextInput)
+    description = forms.CharField(label='Описание заявки', widget=forms.Textarea)
+    category = forms.ChoiceField(label='Категория заявки', widget=forms.Select)
+    image = forms.FileField(label='Фото заявки', widget=forms.FileInput)
