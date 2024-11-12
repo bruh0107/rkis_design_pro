@@ -41,7 +41,7 @@ def create_application(request):
     else:
         form = ApplicationForm()
 
-    return render(request, 'main/create-application.html', {'form': form})
+    return render(request, 'main/application-create.html', {'form': form})
 
 def detail_application(request, pk):
     application = get_object_or_404(Application, pk=pk)

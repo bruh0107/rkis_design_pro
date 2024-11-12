@@ -52,14 +52,16 @@ class CustomUserCreatingForm(forms.ModelForm):
         }
 
 class ApplicationForm(forms.ModelForm):
-    title = forms.CharField(label='Заголовок заявки', widget=forms.TextInput)
+    title = forms.CharField(label='Название заявки', widget=forms.TextInput)
     description = forms.CharField(label='Описание заявки', widget=forms.Textarea)
-    category = forms.ChoiceField(label='Категория заявки', choices=[(cat.id, cat.name) for cat in Category.objects.all()], widget=forms.Select)
     image = forms.FileField(label='Фото заявки', widget=forms.FileInput)
 
     class Meta:
         model = Application
         fields = ('title', 'description', 'category', 'image')
+        widgets = {
+            'category': forms.Select
+        }
 
     def clean_image(self):
         image = self.cleaned_data.get('image')
@@ -71,3 +73,5 @@ class ApplicationForm(forms.ModelForm):
         valid_mime_types = ['image/jpeg', 'image/png', 'image/bmp']
         if image.content_type not in valid_mime_types:
             raise ValidationError("Файл должен быть в формате JPG, JPEG, PNG или BMP")
+
+        return image

@@ -7,4 +7,10 @@
 <p>
     Оставляйте заявки и наши дизайнеры их оценят!
 </p>
+{% if user.is_authenticated %}
+    <div class="my-4 d-flex p-3 w-100 bg-success justify-content-between align-self-center align-items-center rounded-3">
+        <span class="text-light fs-4">Хотите оставить заявку?</span>
+        <a class="btn btn-light" href="{% url 'application-create' %}">Создать заявку</a>
+    </div>
+{% endif %}
 {% endblock %}

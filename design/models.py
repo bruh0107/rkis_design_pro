@@ -28,26 +28,21 @@ class CustomUser(AbstractUser):
         return self.email
 
 class Category(models.Model):
-    name = models.CharField(max_length=150, help_text="Название категории")
+    name = models.CharField(max_length=150, help_text="Название категории", verbose_name='Название')
 
-    CATEGORY_CHOICES = [
-        ('L', 'Лофт'),
-        ('M', 'Минимализм'),
-        ('K', "Классицизм"),
-        ('A', 'Арт-деко'),
-        ('H', 'Хай-тек'),
-        ('O', "Не указано")
-    ]
+    class Meta:
+        verbose_name = 'Категория'
+        verbose_name_plural = 'Категории'
 
     def __str__(self):
         return self.name
 
 class Application(models.Model):
-    applicant = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name="Пользователь", )
+    applicant = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name="Пользователь")
     title = models.CharField(max_length=150, verbose_name="Название заявки")
     description = models.TextField(max_length=150, verbose_name="Описание заявки")
     image = models.FileField(upload_to=applicant, verbose_name="Загрузите фото заявки")
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категория заявки', default='O')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категория заявки')
 
     STATUS_CHOICES = [
         ('N', "Новая"),
