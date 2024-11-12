@@ -1,10 +1,11 @@
-from cProfile import label
+import os.path
 
 from django import forms
 from django.contrib.auth.password_validation import password_changed
 from django.core.exceptions import ValidationError
+from unicodedata import category
 
-from .models import CustomUser, Application
+from .models import CustomUser, Application, Category
 
 
 class CustomUserCreatingForm(forms.ModelForm):
@@ -53,5 +54,20 @@ class CustomUserCreatingForm(forms.ModelForm):
 class ApplicationForm(forms.ModelForm):
     title = forms.CharField(label='Заголовок заявки', widget=forms.TextInput)
     description = forms.CharField(label='Описание заявки', widget=forms.Textarea)
-    category = forms.ChoiceField(label='Категория заявки', widget=forms.Select)
+    category = forms.ChoiceField(label='Категория заявки', choices=[(cat.id, cat.name) for cat in Category.objects.all()], widget=forms.Select)
     image = forms.FileField(label='Фото заявки', widget=forms.FileInput)
+
+    class Meta:
+        model = Application
+        fields = ('title', 'description', 'category', 'image')
+
+    def clean_image(self):
+        image = self.cleaned_data.get('image')
+        max_file_size = 2 * 1024 * 1024
+
+        if image.size > max_file_size:
+            raise ValidationError("Размер файла не должен быть больше 2 MB")
+
+        valid_mime_types = ['image/jpeg', 'image/png', 'image/bmp']
+        if image.content_type not in valid_mime_types:
+            raise ValidationError("Файл должен быть в формате JPG, JPEG, PNG или BMP")

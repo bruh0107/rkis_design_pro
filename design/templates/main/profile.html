@@ -1,13 +1,19 @@
 {% extends 'basic.html' %}
 
+<title>{% block title %}Личный профиль{% endblock %}</title>
+
 {% block content %}
     <h2>Добро пожаловать,
         {% if user.gender == 'M' %}
             Мистер
         {% elif user.gender == 'F' %}
             Мисс
-        {% elif user.gender == 'O' %}
-            уважаемый пользователь
         {% endif %}
         {{ user.first_name }}</h2>
+
+    <p>Имя: {{ user.first_name }}</p>
+    <p>Фамилия: {{ user.last_name }}</p>
+    <p>Адрес электронной почты: {{ user.email }}</p>
+
+    <a href="">Мои заявки</a>
 {% endblock %}

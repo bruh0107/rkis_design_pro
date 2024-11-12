@@ -12,14 +12,13 @@ class CustomUser(AbstractUser):
 
     GENDER_CHOICES = [
         ('M', "Мужчина"),
-        ('F', "Женщина"),
-        ('O', 'Не указано')
+        ('F', "Женщина")
     ]
     gender = models.CharField(
         max_length=1,
         choices=GENDER_CHOICES,
         verbose_name="Пол",
-        default='O'
+        default='M'
     )
 
     USERNAME_FIELD = 'email'
@@ -31,6 +30,15 @@ class CustomUser(AbstractUser):
 class Category(models.Model):
     name = models.CharField(max_length=150, help_text="Название категории")
 
+    CATEGORY_CHOICES = [
+        ('L', 'Лофт'),
+        ('M', 'Минимализм'),
+        ('K', "Классицизм"),
+        ('A', 'Арт-деко'),
+        ('H', 'Хай-тек'),
+        ('O', "Не указано")
+    ]
+
     def __str__(self):
         return self.name
 
@@ -39,7 +47,7 @@ class Application(models.Model):
     title = models.CharField(max_length=150, verbose_name="Название заявки")
     description = models.TextField(max_length=150, verbose_name="Описание заявки")
     image = models.FileField(upload_to=applicant, verbose_name="Загрузите фото заявки")
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категория заявки')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категория заявки', default='O')
 
     STATUS_CHOICES = [
         ('N', "Новая"),

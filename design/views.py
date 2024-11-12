@@ -1,11 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.views import generic
 from django.urls import reverse_lazy
 
-from .forms import CustomUserCreatingForm
-from .models import CustomUser
+from .forms import CustomUserCreatingForm, ApplicationForm
+from .models import CustomUser, Application
 
 # Create your views here.
 
@@ -28,3 +28,21 @@ class Registration(generic.CreateView):
 def profile_view(request):
     user = request.user
     return render(request, 'main/profile.html', {'user': user})
+
+def create_application(request):
+    if request.method == "POST":
+        form = ApplicationForm(request.POST, request.FILES)
+        if form.is_valid():
+            application = form.save(commit=False)
+            application.user = request.user
+            application.save()
+            return redirect('profile')
+
+    else:
+        form = ApplicationForm()
+
+    return render(request, 'main/create-application.html', {'form': form})
+
+def detail_application(request, pk):
+    application = get_object_or_404(Application, pk=pk)
+    return render(request, 'main/application-detail.html', {'application': application})
