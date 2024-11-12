@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import login, logout
@@ -40,8 +41,8 @@ def create_application(request):
 
     return render(request, 'main/application-create.html', {'form': form})
 
-@login_required
-class Profile(generic.DetailView):
+
+class Profile(LoginRequiredMixin, generic.DetailView):
     model = CustomUser
     template_name = 'main/profile.html'
     context_object_name = 'user_profile'
@@ -55,9 +56,9 @@ class Profile(generic.DetailView):
         status_filter = self.request.GET.get('status', '')
 
         if status_filter:
-            application = Application.objects.filter(user=self.request.user, status=status_filter).order_by('data')
+            application = Application.objects.filter(applicant=self.request.user, status=status_filter).order_by('date')
         else:
-            application = Application.objects.filter(user=self.request.user).order_by('data')
+            application = Application.objects.filter(applicant=self.request.user).order_by('date')
 
         context['application'] = application
         context['status_filter'] = status_filter
