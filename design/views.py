@@ -34,7 +34,7 @@ def create_application(request):
         form = ApplicationForm(request.POST, request.FILES)
         if form.is_valid():
             application = form.save(commit=False)
-            application.user = request.user
+            application.applicant = request.user
             application.save()
             return redirect('profile')
 

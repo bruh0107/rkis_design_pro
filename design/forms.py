@@ -75,3 +75,9 @@ class ApplicationForm(forms.ModelForm):
             raise ValidationError("Файл должен быть в формате JPG, JPEG, PNG или BMP")
 
         return image
+
+    def save(self, commit=True):
+        application = super().save(commit=False)
+        if commit:
+            application.save()
+        return application
