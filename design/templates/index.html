@@ -8,6 +8,26 @@
     Оставляйте заявки и наши дизайнеры их оценят!
 </p>
 {% if user.is_authenticated and not user.is_staff %}
+
+
+    <div id="application-slider" class="slider-container mb-4">
+        <div class="slider-wrapper">
+            {% for application in slider %}
+                <div class="slider-item">
+                    <img src="{{ application.image.url }}" alt="Фото заявки" class="slider-image">
+                    <div class="slider-caption">
+                        <p>{{ application.title }}</p>
+                        <p>{{ application.description|truncatewords:15 }}</p>
+                        <span>Категория: {{ application.category }}</span>
+                        <p>Дата: {{ application.date|date:"d.m.Y H:i" }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <button class="prev-btn"><</button>
+        <button class="next-btn">></button>
+    </div>
+
     <div class="my-4 d-flex p-3 w-100 bg-success justify-content-between align-self-center align-items-center rounded-3">
         <span class="text-light fs-4">Хотите оставить заявку?</span>
         <a class="btn btn-light" href="{% url 'application-create' %}">Создать заявку</a>
@@ -20,7 +40,7 @@
             <div class="py-3">
                 <div class="d-flex align-items-center gap-2">
                     <img style="height: 150px; max-width: 150px; object-fit: cover;" src="{{ application.image.url }}" alt="Фото проекта">
-                    <div class="flex-grow-1">
+                     <div class="flex-grow-1">
                         <div class="d-flex justify-content-between">
                             <p class="d-flex align-items-center gap-1 fs-5">{{ application.title }} {% if application.status == "N" %}
                                     <span class="text-light bg-warning px-2 py-1 rounded-2">Новая</span>

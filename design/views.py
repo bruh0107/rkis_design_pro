@@ -14,10 +14,13 @@ from .models import CustomUser, Application
 def index(request):
     completed_applications = Application.objects.filter(status="D").order_by('-date')[:4]
     in_progress = Application.objects.filter(status="P").count()
+    slider = Application.objects.all().order_by('-date')[:3]
 
     context = {
         'completed_applications': completed_applications,
-        'in_progress': in_progress
+        'in_progress': in_progress,
+        'slider': slider
+
     }
 
     return render(request, 'index.html', context)

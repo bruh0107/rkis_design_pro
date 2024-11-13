@@ -52,10 +52,12 @@
                         </div>
                         <div class="d-flex justify-content-between">
                             <p style="width: 500px; height: 50px; text-overflow: ellipsis; overflow: hidden;">{{ application.description }}</p>
-                            <form action="{% url 'application-delete' application.id %}" method="post">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn btn-success">Удалить заявку</button>
-                            </form>
+                            {% if application.status == 'N' %}
+                                <form action="{% url 'application-delete' application.id %}" method="post">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-success">Удалить заявку</button>
+                                </form>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
