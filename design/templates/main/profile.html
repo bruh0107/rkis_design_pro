@@ -17,14 +17,17 @@
     <p>Адрес электронной почты: {{ user.email }}</p>
     <h2>Мои заявки</h2>
 
-    <form method="get" class="mb-4">
-        <label for="status" class="form-label">Фильльтрация по статусу</label>
-        <select class="form-select" name="status" id="status">
-            <option value="" {% if status_filter == '' %}selected{% endif %}>Все</option>
-            <option value="n" {% if status_filter == "N" %}selected{% endif %}>Новая</option>
-            <option value="a" {% if status_filter == 'P' %}selected{% endif %}>Принято в работу</option>
-            <option value="s" {% if status_filter == 'M' %}selected{% endif %}>Выполнено</option>
+    <form method="get" class="mb-4 d-flex align-items-center gap-2">
+        <label for="status" class="form-label">Фильтр</label>
+        <select class="form-select" name="status" id="status" >
+            <option value="">Все</option>
+            {% for status_code, status_name in status_choices %}
+                <option value="{{ status_code }}" {% if status_code == status_filter %}selected{% endif %}>
+                    {{ status_name }}
+                </option>
+            {% endfor %}
         </select>
+        <button type="submit" class="btn btn-success">Фильтровать</button>
     </form>
 
     <div>
@@ -37,9 +40,9 @@
                             <p class="d-flex align-items-center gap-1">{{ application.title }} {% if application.status == "N" %}
                                     <span class="text-light bg-warning px-2 py-1 rounded-2">Новая</span>
                                 {% elif application.status == "P" %}
-                                    <span class="text-info">Принято в работу</span>
+                                    <span class="text-light bg-info px-2 py-1 rounded-2">Принято в работу</span>
                                 {% elif application.status == "D" %}
-                                    <span class="text-success">Выполнено</span>
+                                    <span class="text-light bg-success px-2 py-1 rounded-2">Выполнено</span>
                                 {% endif %}</p>
                             <span>Категория: {{ application.category }}</span>
                         </div>

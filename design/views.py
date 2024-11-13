@@ -12,10 +12,15 @@ from .models import CustomUser, Application
 # Create your views here.
 
 def index(request):
-     return render(
-         request,
-         'index.html'
-     )
+    completed_applications = Application.objects.filter(status="D").order_by('-date')[:4]
+    in_progress = Application.objects.filter(status="P").count()
+
+    context = {
+        'completed_applications': completed_applications,
+        'in_progress': in_progress
+    }
+
+    return render(request, 'index.html', context)
 
 def logout_view(request):
     logout(request)
@@ -56,12 +61,13 @@ class Profile(LoginRequiredMixin, generic.DetailView):
         status_filter = self.request.GET.get('status', '')
 
         if status_filter:
-            applications = Application.objects.filter(applicant=self.request.user, status=status_filter).order_by('date')
+            applications = Application.objects.filter(applicant=self.request.user, status=status_filter).order_by('-date')
         else:
-            applications = Application.objects.filter(applicant=self.request.user).order_by('date')
+            applications = Application.objects.filter(applicant=self.request.user).order_by('-date')
 
         context['applications'] = applications
         context['status_filter'] = status_filter
+        context['status_choices'] = Application.STATUS_CHOICES
 
         return context
 

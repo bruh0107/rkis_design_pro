@@ -3,7 +3,6 @@ import os.path
 from django import forms
 from django.contrib.auth.password_validation import password_changed
 from django.core.exceptions import ValidationError
-from unicodedata import category
 
 from .models import CustomUser, Application, Category
 
