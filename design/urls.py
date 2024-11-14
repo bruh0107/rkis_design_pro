@@ -11,6 +11,4 @@ urlpatterns = [
 
     path('create/', views.create_application, name='application-create'),
     path('application/<int:pk>/delete/', views.delete_application, name='application-delete'),
-
-    path('application/<int:pk>/', views.ApplicationDetailView.as_view(), name='application-detail')
 ]

@@ -79,8 +79,7 @@ class Profile(LoginRequiredMixin, generic.DetailView):
 
 class ApplicationDetailView(LoginRequiredMixin, DetailView):
     model = Application
-    template_name = 'main/application_detail.html'
-    context_object_name = 'application'
+    template_name = 'main/application-detail.html'
 
 @login_required
 def delete_application(request, pk):
@@ -94,22 +93,5 @@ def delete_application(request, pk):
 
     return redirect('profile')
 
-@staff_member_required
-def update_application_status(request, pk):
-    application = get_object_or_404(Application, pk=pk)
-
-    if application.status in ['P', 'D']:
-        messages.error(request,"Изменение статуса невозможно для заявок со статусом 'Принято в работу' или 'Выполнено'.")
-
-    if request.method == 'POST':
-        form = ApplicationStatusForm(request.POST, request.FILES, instance=application)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Статус заявки успешно обновлен.')
-            return redirect('application-detail', pk=application.pk)
-    else:
-        form = ApplicationStatusForm(instance=application)
-
-    return render(request, 'main/update_status.html', {'form': form, 'application': application})
 
 

@@ -51,12 +51,14 @@
                             </p>
                             <span>Категория: {{ application.category }}</span>
                         </div>
-                        <div class="d-flex justify-content-end">
-                            <p>Дата создания: {{ application.date|date:"d.m.Y H:i" }}</p>
-                        </div>
                         <div class="d-flex justify-content-between">
-                            <p style="width: 500px; height: 50px; text-overflow: ellipsis; overflow: hidden;">{{ application.description }}</p>
+                            <p>Дата создания: {{ application.date|date:"d.m.Y H:i" }}</p>
                             <p>Создатель заявки: {{ application.applicant.username }}</p>
+
+                        </div>
+                        <div class="d-flex justify-content-between align-items-start">
+                            <p style="width: 500px; height: 50px; text-overflow: ellipsis; overflow: hidden;">{{ application.description }}</p>
+                            <a class="btn btn-success" href="{% url 'application-detail' application.pk %}">Подробнее о заявке</a>
                         </div>
                     </div>
                 </div>
