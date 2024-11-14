@@ -51,6 +51,7 @@ class Application(models.Model):
     ]
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default="N", verbose_name='Статус заявки')
     date = models.DateTimeField(help_text="Дата создания заявки", auto_now_add=True)
+    comment = models.TextField(blank=True, null=True, verbose_name="Комментарий к заявке")
 
     class Meta:
         verbose_name = 'Заявка'

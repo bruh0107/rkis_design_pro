@@ -7,8 +7,6 @@
 <p>
     Оставляйте заявки и наши дизайнеры их оценят!
 </p>
-{% if user.is_authenticated and not user.is_staff %}
-
 
     <div id="application-slider" class="slider-container mb-4">
         <div class="slider-wrapper">
@@ -27,11 +25,12 @@
         <button class="prev-btn"><</button>
         <button class="next-btn">></button>
     </div>
-
-    <div class="my-4 d-flex p-3 w-100 bg-success justify-content-between align-self-center align-items-center rounded-3">
-        <span class="text-light fs-4">Хотите оставить заявку?</span>
-        <a class="btn btn-light" href="{% url 'application-create' %}">Создать заявку</a>
-    </div>
+    {% if user.is_authenticated and not user.is_staff %}
+        <div class="my-4 d-flex p-3 w-100 bg-success justify-content-between align-self-center align-items-center rounded-3">
+            <span class="text-light fs-4">Хотите оставить заявку?</span>
+            <a class="btn btn-light" href="{% url 'application-create' %}">Создать заявку</a>
+        </div>
+    {% endif %}
 
     <p>Количество заявок в статусе "Принято в работу": {{ in_progress }}</p>
 
@@ -64,5 +63,4 @@
             </div>
         {% endfor %}
     </div>
-{% endif %}
 {% endblock %}

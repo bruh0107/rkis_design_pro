@@ -1,0 +1,9 @@
+{% extends 'basic.html' %}
+{% block content %}
+    <h2>{{ application.title }}</h2>
+    <p>{{ application.image }}</p>
+    <p><strong>Описание:</strong> {{ application.description }}</p>
+    <p><strong>Статус:</strong> {{ application.status }}</p>
+    <p><strong>Дата создания:</strong> {{ application.date }}</p>
+    <p><strong>Категория:</strong> {{ application.category }}</p>
+{% endblock %}

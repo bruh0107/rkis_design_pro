@@ -1,3 +1,4 @@
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
@@ -5,9 +6,11 @@ from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.views import generic
 from django.urls import reverse_lazy
+from django.views.generic import DetailView
 
-from .forms import CustomUserCreatingForm, ApplicationForm
+from .forms import CustomUserCreatingForm, ApplicationForm, ApplicationStatusForm
 from .models import CustomUser, Application
+
 
 # Create your views here.
 
@@ -74,6 +77,11 @@ class Profile(LoginRequiredMixin, generic.DetailView):
 
         return context
 
+class ApplicationDetailView(LoginRequiredMixin, DetailView):
+    model = Application
+    template_name = 'main/application_detail.html'
+    context_object_name = 'application'
+
 @login_required
 def delete_application(request, pk):
     application = get_object_or_404(Application, pk=pk)
@@ -85,3 +93,23 @@ def delete_application(request, pk):
             messages.error(request, 'Вы не можете удалить заявки, которые имеют статус "Принято в работу" и "Выполнено"')
 
     return redirect('profile')
+
+@staff_member_required
+def update_application_status(request, pk):
+    application = get_object_or_404(Application, pk=pk)
+
+    if application.status in ['P', 'D']:
+        messages.error(request,"Изменение статуса невозможно для заявок со статусом 'Принято в работу' или 'Выполнено'.")
+
+    if request.method == 'POST':
+        form = ApplicationStatusForm(request.POST, request.FILES, instance=application)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Статус заявки успешно обновлен.')
+            return redirect('application-detail', pk=application.pk)
+    else:
+        form = ApplicationStatusForm(instance=application)
+
+    return render(request, 'main/update_status.html', {'form': form, 'application': application})
+
+
