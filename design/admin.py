@@ -24,15 +24,16 @@ class CustomUserAdmin(UserAdmin):
     )
 
 class ApplicationAdminForm(forms.ModelForm):
+    done_status_image = forms.ImageField(required=False,
+                                    label='Фото готового дизайна (добавить, если статус меняется на "Выполнено")')
+    comment = forms.CharField(required=False,
+                              label='Комментарий к работе (добавить, если статус меняется на "Принято на работу")',
+                              widget=forms.Textarea)
+
     class Meta:
         model = Application
         fields = '__all__'
         exclude = ['image']
-
-    design_image = forms.ImageField(required=False,
-                                    label='Фото готового дизайна (добавить, если статус меняется на "Выполнено")')
-    comment = forms.CharField(required=False,
-                              label='Комментарий к работе (добавить, если статус меняется на "Принято на работу")')
 
     def clean(self):
         cleaned_data = super().clean()
@@ -45,17 +46,16 @@ class ApplicationAdminForm(forms.ModelForm):
         if status == 'P' and not cleaned_data.get('comment'):
             raise ValidationError('Добавьте комментарий')
 
-        if status == 'D' and not cleaned_data.get('design_image'):
+        if status == 'D' and not cleaned_data.get('done_status_image'):
             raise ValidationError('Добавьте фото готового дизайна')
 
         return cleaned_data
 
+@admin.register(Application)
 class ApplicationAdmin(admin.ModelAdmin):
     form = ApplicationAdminForm
-    list_display = ('user', 'title', 'status', 'category', 'date')
-    readonly_fields = ('user', 'title', 'description', 'category', 'date')
-    list_filter = ('status', 'category', 'created_at')
-    search_fields = ('title', 'user__username', 'description')
+    list_display = ('title', 'applicant', 'status', 'date', 'category')
+    readonly_fields = ('applicant', 'title', 'description', 'category', 'date')
     exclude = ['image']
 
     def get_form(self, request, obj=None, **kwargs):
@@ -65,9 +65,9 @@ class ApplicationAdmin(admin.ModelAdmin):
             status = obj.status
 
             if status == 'P':
-                if 'design_image' in form.base_fields:
-                    form.base_fields['design_image'].required = False
-                    del form.base_fields['design_image']
+                if 'done_status_image' in form.base_fields:
+                    form.base_fields['done_status_image'].required = False
+                    del form.base_fields['done_status_image']
 
             elif status == 'D':
                 if 'comment' in form.base_fields:
@@ -78,14 +78,11 @@ class ApplicationAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         if form.is_valid():
-            obj.commit = form.cleaned_data.get('comment', '')
-            obj.design_image = form.cleaned_data.get('design_image', None)
+            obj.comment = form.cleaned_data.get('comment', '')
+            obj.done_status_image = form.cleaned_data.get('done_status_image', None)
             with transaction.atomic():
                 obj.save()
 
 
-
-
-admin.site.register(Category)
 admin.site.register(CustomUser, CustomUserAdmin)
-admin.site.register(Application)
+admin.site.register(Category)

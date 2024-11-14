@@ -80,26 +80,3 @@ class ApplicationForm(forms.ModelForm):
         if commit:
             application.save()
         return application
-
-class ApplicationStatusForm(forms.ModelForm):
-    status = forms.ChoiceField(choices=Application.STATUS_CHOICES, label="Статус заявки")
-    comment = forms.CharField(widget=forms.Textarea, required=True, label="Комментарий к заявке")
-    image = forms.FileField(required=True, label="Фото готовой работы")
-
-    class Meta:
-        model = Application
-        fields = ['status', 'comment', 'image']
-
-    def clean(self):
-        cleaned_data = super().clean()
-        status = cleaned_data.get("status")
-        comment = cleaned_data.get("comment")
-        image = cleaned_data.get("image")
-
-        if status == 'P' and not comment:
-            raise ValidationError('Необходимо указать комментарий при смене статуса')
-
-        if status == 'D' and not image:
-            raise ValidationError('Необходимо прикрепить изображение')
-
-        return cleaned_data

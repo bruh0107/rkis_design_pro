@@ -43,7 +43,7 @@ class Application(models.Model):
     description = models.TextField(max_length=500, verbose_name="Описание заявки")
     image = models.FileField(upload_to='images/', verbose_name="Загрузите фото заявки")
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категория заявки')
-    design_image = models.FileField(upload_to='images/', verbose_name="Фото готового дизайна", blank=True, null=True)
+    done_status_image = models.FileField(upload_to='admin_photo/', verbose_name="Фото готового дизайна", blank=True, null=True)
 
     STATUS_CHOICES = [
         ('N', "Новая"),

@@ -8,7 +8,7 @@ from django.views import generic
 from django.urls import reverse_lazy
 from django.views.generic import DetailView
 
-from .forms import CustomUserCreatingForm, ApplicationForm, ApplicationStatusForm
+from .forms import CustomUserCreatingForm, ApplicationForm
 from .models import CustomUser, Application
 
 
@@ -76,10 +76,6 @@ class Profile(LoginRequiredMixin, generic.DetailView):
         context['status_choices'] = Application.STATUS_CHOICES
 
         return context
-
-class ApplicationDetailView(LoginRequiredMixin, DetailView):
-    model = Application
-    template_name = 'main/application-detail.html'
 
 @login_required
 def delete_application(request, pk):
