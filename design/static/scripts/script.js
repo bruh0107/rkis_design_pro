@@ -3,7 +3,7 @@ const nextBtn = document.querySelector('.next-btn')
 const prevBtn = document.querySelector('.prev-btn')
 let currentIndex = 0
 
-function showSlide(index){
+function sliderFunc(index){
     const allSlides = document.querySelectorAll('.slider-item').length
     if(index >= allSlides){
         currentIndex = 0
@@ -20,11 +20,9 @@ function showSlide(index){
 }
 
 prevBtn.addEventListener('click', () => {
-    console.log('kldfjlkdfg')
-    showSlide(currentIndex - 1)
+    sliderFunc(currentIndex - 1)
 })
 
 nextBtn.addEventListener('click', () => {
-    console.log(';lmlm,jb')
-    showSlide(currentIndex + 1)
+    sliderFunc(currentIndex + 1)
 })
