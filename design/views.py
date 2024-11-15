@@ -17,7 +17,7 @@ from .models import CustomUser, Application
 def index(request):
     completed_applications = Application.objects.filter(status="D").order_by('-date')[:4]
     in_progress = Application.objects.filter(status="P").count()
-    slider = Application.objects.all().order_by('-date')[:3]
+    slider = Application.objects.filter(favorite=True).order_by('-date')[:3]
 
     context = {
         'completed_applications': completed_applications,
@@ -88,6 +88,3 @@ def delete_application(request, pk):
             messages.error(request, 'Вы не можете удалить заявки, которые имеют статус "Принято в работу" и "Выполнено"')
 
     return redirect('profile')
-
-
-

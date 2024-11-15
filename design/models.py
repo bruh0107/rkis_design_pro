@@ -45,6 +45,7 @@ class Application(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категория заявки')
     done_status_image = models.FileField(upload_to='admin_photo/', verbose_name="Фото готового дизайна", blank=True, null=True)
 
+
     STATUS_CHOICES = [
         ('N', "Новая"),
         ('P', "Принято в работу"),
@@ -53,13 +54,12 @@ class Application(models.Model):
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default="N", verbose_name='Статус заявки')
     date = models.DateTimeField(help_text="Дата создания заявки", auto_now_add=True)
     comment = models.TextField(blank=True, null=True, verbose_name="Комментарий к заявке")
+    favorite = models.BooleanField(default=False, verbose_name='Добавить в избранное')
 
     class Meta:
         verbose_name = 'Заявка'
         verbose_name_plural = 'Заявки'
 
-    def get_absolute_url(self):
-        return reverse('application-detail', args=[str(self.id)])
 
     def display_category(self):
         return self.category.name if self.category else "Категории нету"

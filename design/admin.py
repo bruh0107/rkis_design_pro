@@ -54,7 +54,7 @@ class ApplicationAdminForm(forms.ModelForm):
 @admin.register(Application)
 class ApplicationAdmin(admin.ModelAdmin):
     form = ApplicationAdminForm
-    list_display = ('title', 'applicant', 'status', 'date', 'category')
+    list_display = ('title', 'applicant', 'status', 'date', 'category', 'favorite')
     readonly_fields = ('applicant', 'title', 'description', 'category', 'date')
     exclude = ['image']
 
@@ -82,6 +82,12 @@ class ApplicationAdmin(admin.ModelAdmin):
             obj.done_status_image = form.cleaned_data.get('done_status_image', None)
             with transaction.atomic():
                 obj.save()
+
+    def get_readonly_field(self, request, obj=None):
+        readonly_fields = super().get_readonly_fields(request, obj)
+        if obj and obj.status != 'D':
+            readonly_fields += ('favorite')
+        return readonly_fields
 
 
 admin.site.register(CustomUser, CustomUserAdmin)
